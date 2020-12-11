@@ -14,7 +14,7 @@
 
 FROM debian:buster
 
-MAINTAINER bryan@turbojets.net
+LABEL maintainer="christian.stoeger@endress.com"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DIST=debian
@@ -43,10 +43,26 @@ RUN apt-get -y install aptly           \
                        gpgv            \
                        graphviz        \
                        supervisor      \
+                       openssh-server  \
+                       cron            \
                        nginx           \
                        wget            \
                        xz-utils        \
-                       vim-tiny
+                       vim-tiny        \
+                       dos2unix        \
+                       pwgen           \
+                       sed
+
+RUN service supervisor stop
+
+# Install ssh
+RUN mkdir /var/run/sshd && service ssh stop
+COPY assets/supervisord.ssh.conf /etc/supervisor/conf.d/ssh.conf
+
+# Install cron
+COPY assets/supervisord.cron.conf /etc/supervisor/conf.d/cron.conf
+RUN sed -i 's/\(session *required *pam_loginuid.so\)/#\1/' /etc/pam.d/cron
+
 
 # Install Aptly Configuration
 COPY assets/aptly.conf /etc/aptly.conf
@@ -70,9 +86,14 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 # Install scripts
 COPY assets/*.sh /opt/
 COPY assets/update_mirror/update_mirror_debian.sh /opt/update_mirror.sh
+RUN chmod +x /opt/*.sh && dos2unix /opt/*.sh
+
+# Root Access
+RUN echo "root:dockaptly" | chpasswd
 
 # Bind mount locations
 VOLUME [ "/opt/aptly" ]
+VOLUME [ "/opt/incoming" ]
 VOLUME [ "/root/.gnupg" ]
 
 # Execute Startup script when container starts

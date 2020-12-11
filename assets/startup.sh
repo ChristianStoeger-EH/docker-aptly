@@ -42,5 +42,24 @@ ln -sf /opt/aptly/aptly.pub /root/.gnupg/pubring.gpg
 # Generate Nginx Config
 /opt/nginx.conf.sh
 
+# ssh related things
+# add a user for uploading packages with e.g. dput
+SSH_USERPASS=`pwgen -c -n -1 8`
+mkdir /home/uploader
+useradd -d /home/uploader -s /bin/bash uploader
+chown -R uploader /home/uploader
+chown -R uploader /opt/incoming
+
+echo "uploader:$SSH_USERPASS" | chpasswd
+echo "ssh uploader password: $SSH_USERPASS"
+
+# import new packages eyery minute
+crontab <<EOF
+* * * * *   /opt/aptly-import.sh
+EOF
+
+# initial import 
+/opt/aptly-import.sh
+
 # Start Supervisor
 /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
