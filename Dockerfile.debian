@@ -51,7 +51,8 @@ RUN apt-get -y install aptly           \
                        vim-tiny        \
                        dos2unix        \
                        pwgen           \
-                       sed
+                       sed             \
+                       inoticoming
 
 RUN service supervisor stop
 
@@ -93,7 +94,6 @@ RUN echo "root:dockaptly" | chpasswd
 
 # Bind mount locations
 VOLUME [ "/opt/aptly" ]
-VOLUME [ "/opt/incoming" ]
 VOLUME [ "/root/.gnupg" ]
 
 # Execute Startup script when container starts

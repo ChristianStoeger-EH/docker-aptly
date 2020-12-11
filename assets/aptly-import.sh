@@ -1,3 +1,6 @@
 #!/bin/bash
 
-aptly repo include /opt/incoming/
+#aptly repo include /opt/incoming/
+echo importing new packages...
+
+echo publish the new packages...

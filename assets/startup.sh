@@ -48,18 +48,20 @@ SSH_USERPASS=`pwgen -c -n -1 8`
 mkdir /home/uploader
 useradd -d /home/uploader -s /bin/bash uploader
 chown -R uploader /home/uploader
+
+mkdir /opt/incoming
 chown -R uploader /opt/incoming
+
+# add a place for the logs
+mkdir /opt/logs
 
 echo "uploader:$SSH_USERPASS" | chpasswd
 echo "ssh uploader password: $SSH_USERPASS"
 
 # import new packages eyery minute
 crontab <<EOF
-* * * * *   /opt/aptly-import.sh
+@reboot inoticoming --logfile /opt/logs/inoticoming.log /opt/incoming/ --chdir /opt/incoming/ --stdout-to-log --suffix .changes /opt/aptly-import.sh {} \;
 EOF
-
-# initial import 
-/opt/aptly-import.sh
 
 # Start Supervisor
 /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf

@@ -1,0 +1,22 @@
+version: "3.9"
+services: 
+  aptly:
+    build:
+      context: .
+      dockerfile: Dockerfile.debian
+    image: aptly-image:0.1
+    ports: 
+      - "2001:22"
+      - "2002:80"
+    volumes: 
+      - apt-repo:/opt/aptly
+      - apt-gnupg:/root/.gnupg
+    environment: 
+      FULL_NAME: Christian Stöger
+      EMAIL_ADDRESS: christian.stoeger@endress.com
+      GPG_PASSWORD: TESTpw
+      HOSTNAME: 192.168.188.53
+
+volumes: 
+  apt-repo:
+  apt-gnupg:
