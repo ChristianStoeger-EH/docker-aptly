@@ -58,7 +58,7 @@ mkdir /opt/logs
 echo "uploader:$SSH_USERPASS" | chpasswd
 echo "ssh uploader password: $SSH_USERPASS"
 
-# import new packages eyery minute
+# import new packages which are placed in /opt/incoming
 crontab <<EOF
 @reboot inoticoming --logfile /opt/logs/inoticoming.log /opt/incoming/ --chdir /opt/incoming/ --stdout-to-log --suffix .changes /opt/aptly-import.sh {} \;
 EOF

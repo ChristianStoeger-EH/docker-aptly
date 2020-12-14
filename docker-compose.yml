@@ -12,7 +12,7 @@ services:
       - apt-repo:/opt/aptly
       - apt-gnupg:/root/.gnupg
     environment: 
-      FULL_NAME: Christian Stöger
+      FULL_NAME: Christian Stoeger
       EMAIL_ADDRESS: christian.stoeger@endress.com
       GPG_PASSWORD: TESTpw
       HOSTNAME: 192.168.188.53
