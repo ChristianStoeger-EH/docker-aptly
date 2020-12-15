@@ -67,6 +67,7 @@ RUN sed -i 's/\(session *required *pam_loginuid.so\)/#\1/' /etc/pam.d/cron
 
 # Install Aptly Configuration
 COPY assets/aptly.conf /etc/aptly.conf
+COPY assets/supervisord.aptlyapi.conf /etc/supervisor/conf.d/aptlyapi.conf
 
 # Enable Aptly Bash completions
 RUN wget https://github.com/smira/aptly-fork/raw/master/completion.d/aptly \

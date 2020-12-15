@@ -11,6 +11,7 @@ services:
     volumes: 
       - apt-repo:/opt/aptly
       - apt-gnupg:/root/.gnupg
+      - ./incoming:/opt/incoming
     environment: 
       FULL_NAME: Christian Stoeger
       EMAIL_ADDRESS: christian.stoeger@endress.com
